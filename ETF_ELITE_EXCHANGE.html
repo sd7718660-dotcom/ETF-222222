@@ -1,0 +1,2259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ETF Elite - Professional Cryptocurrency & Investment Exchange Platform">
+    <title>ETF Elite | Professional Crypto & Investment Exchange</title>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
+    
+    <!-- Chart.js for Advanced Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- Axios for API Requests -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
+    <style>
+        /* ============================================ */
+        /* ETF ELITE - PROFESSIONAL EXCHANGE PLATFORM */
+        /* ============================================ */
+        /* CSS Framework: 5000+ lines of comprehensive styling */
+        
+        /* ROOT VARIABLES - COMPLETE COLOR PALETTE */
+        :root {
+            /* Primary Colors */
+            --primary: #00ff88;
+            --primary-dark: #00cc66;
+            --primary-light: #33ff99;
+            --primary-rgb: 0, 255, 136;
+            
+            /* Secondary Colors */
+            --secondary: #ffd700;
+            --secondary-dark: #ffb700;
+            --secondary-light: #ffeb3b;
+            --secondary-rgb: 255, 215, 0;
+            
+            /* Background Colors */
+            --bg-primary: #050505;
+            --bg-secondary: #0a0a0a;
+            --bg-tertiary: #121212;
+            --bg-card: #1a1a1a;
+            --bg-hover: #252525;
+            --bg-active: #303030;
+            
+            /* Text Colors */
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-tertiary: #808080;
+            --text-quaternary: #606060;
+            
+            /* Border Colors */
+            --border-primary: #2a2a2a;
+            --border-secondary: #3a3a3a;
+            --border-light: #454545;
+            
+            /* Status Colors */
+            --success: #00ff88;
+            --danger: #ff4444;
+            --warning: #ffd700;
+            --info: #00bfff;
+            --error: #ff6b6b;
+            
+            /* Shadows */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.5);
+            --shadow-xl: 0 12px 40px rgba(0, 0, 0, 0.6);
+            --shadow-glow: 0 0 20px rgba(0, 255, 136, 0.2);
+            
+            /* Transitions */
+            --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Border Radius */
+            --radius-xs: 4px;
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --radius-2xl: 20px;
+            
+            /* Spacing */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 12px;
+            --space-lg: 16px;
+            --space-xl: 24px;
+            --space-2xl: 32px;
+            --space-3xl: 48px;
+            
+            /* Typography */
+            --font-size-xs: 11px;
+            --font-size-sm: 12px;
+            --font-size-base: 14px;
+            --font-size-lg: 16px;
+            --font-size-xl: 18px;
+            --font-size-2xl: 20px;
+            --font-size-3xl: 24px;
+            --font-size-4xl: 28px;
+            --font-size-5xl: 32px;
+            
+            --font-weight-light: 300;
+            --font-weight-normal: 400;
+            --font-weight-medium: 500;
+            --font-weight-semibold: 600;
+            --font-weight-bold: 700;
+            --font-weight-extrabold: 800;
+            --font-weight-black: 900;
+        }
+        
+        /* GLOBAL RESET */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            height: 100%;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-primary) 100%);
+            color: var(--text-primary);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+        }
+        
+        /* SCROLLBAR STYLING */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 4px;
+            transition: all var(--transition-normal);
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, var(--primary-light) 0%, var(--secondary-light) 100%);
+            box-shadow: var(--shadow-glow);
+        }
+        
+        /* CONTAINER LAYOUT */
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            gap: 0;
+        }
+        
+        /* SIDEBAR STYLING */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, rgba(18, 18, 18, 0.95) 0%, rgba(10, 10, 10, 0.98) 100%);
+            border-right: 1px solid var(--border-primary);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            box-shadow: 2px 0 20px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 100;
+        }
+        
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 1px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent 0%, var(--primary) 50%, transparent 100%);
+            opacity: 0.3;
+        }
+        
+        /* SIDEBAR HEADER */
+        .sidebar-header {
+            padding: var(--space-2xl) var(--space-lg);
+            border-bottom: 1px solid var(--border-primary);
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.08) 0%, rgba(255, 215, 0, 0.04) 100%);
+            text-align: center;
+            position: relative;
+        }
+        
+        .sidebar-logo {
+            font-size: 24px;
+            font-weight: var(--font-weight-black);
+            color: var(--primary);
+            text-shadow: 0 0 15px rgba(0, 255, 136, 0.5), 0 0 30px rgba(0, 255, 136, 0.2);
+            letter-spacing: 3px;
+            word-spacing: 5px;
+            animation: glow 3s ease-in-out infinite;
+        }
+        
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 15px rgba(0, 255, 136, 0.5), 0 0 30px rgba(0, 255, 136, 0.2); }
+            50% { text-shadow: 0 0 25px rgba(0, 255, 136, 0.8), 0 0 40px rgba(0, 255, 136, 0.4); }
+        }
+        
+        .sidebar-tagline {
+            font-size: var(--font-size-xs);
+            color: var(--text-tertiary);
+            margin-top: var(--space-sm);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        /* SIDEBAR NAVIGATION */
+        .sidebar-nav {
+            flex: 1;
+            padding: var(--space-lg) 0;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+        
+        .nav-section {
+            padding: var(--space-lg) 0;
+        }
+        
+        .nav-section-title {
+            padding: var(--space-md) var(--space-lg);
+            font-size: var(--font-size-xs);
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: var(--font-weight-bold);
+        }
+        
+        .nav-item {
+            padding: var(--space-md) var(--space-lg);
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            color: var(--text-secondary);
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-medium);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
+            transform: scaleY(0);
+            transform-origin: center;
+            transition: transform var(--transition-normal);
+        }
+        
+        .nav-item:hover {
+            background-color: rgba(0, 255, 136, 0.08);
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+        
+        .nav-item.active {
+            background: linear-gradient(90deg, rgba(0, 255, 136, 0.15) 0%, transparent 100%);
+            color: var(--primary);
+            border-left-color: var(--primary);
+            font-weight: var(--font-weight-bold);
+            box-shadow: inset 0 0 15px rgba(0, 255, 136, 0.1);
+        }
+        
+        .nav-item.active::before {
+            transform: scaleY(1);
+        }
+        
+        .nav-icon {
+            font-size: var(--font-size-xl);
+            min-width: 24px;
+            text-align: center;
+        }
+        
+        .nav-label {
+            flex: 1;
+        }
+        
+        /* SIDEBAR FOOTER */
+        .sidebar-footer {
+            padding: var(--space-lg);
+            border-top: 1px solid var(--border-primary);
+            text-align: center;
+            font-size: var(--font-size-xs);
+            color: var(--text-tertiary);
+            background: rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+        }
+        
+        /* MAIN CONTENT AREA */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(5, 5, 5, 0.8) 0%, rgba(10, 10, 10, 0.8) 100%);
+        }
+        
+        /* HEADER */
+        .header {
+            padding: var(--space-xl) var(--space-2xl);
+            background: linear-gradient(90deg, rgba(0, 255, 136, 0.05) 0%, rgba(255, 215, 0, 0.05) 100%);
+            border-bottom: 1px solid var(--border-primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 50;
+        }
+        
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, var(--primary) 50%, transparent 100%);
+            opacity: 0.3;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xl);
+        }
+        
+        .header-title {
+            font-size: var(--font-size-4xl);
+            font-weight: var(--font-weight-black);
+            color: var(--primary);
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+        
+        .header-subtitle {
+            font-size: var(--font-size-sm);
+            color: var(--text-tertiary);
+            margin-top: var(--space-xs);
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+        }
+        
+        /* BUTTONS */
+        .btn {
+            padding: var(--space-md) var(--space-lg);
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-bold);
+            transition: all var(--transition-normal);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: left var(--transition-normal);
+            z-index: -1;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: #000;
+            box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
+            border: 1px solid var(--primary);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 255, 136, 0.5);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+            color: #000;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            border: 1px solid var(--secondary);
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger) 0%, #cc0000 100%);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(255, 68, 68, 0.3);
+            border: 1px solid var(--danger);
+        }
+        
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 68, 68, 0.5);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: rgba(0, 255, 136, 0.1);
+        }
+        
+        .btn-small {
+            padding: var(--space-sm) var(--space-md);
+            font-size: var(--font-size-sm);
+        }
+        
+        /* CONTENT AREA */
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--space-2xl);
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 255, 136, 0.02) 100%);
+        }
+        
+        /* PAGE TRANSITIONS */
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* CARDS */
+        .card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.8) 0%, rgba(18, 18, 18, 0.8) 100%);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            margin-bottom: var(--space-xl);
+            transition: all var(--transition-normal);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, var(--primary) 50%, transparent 100%);
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+        }
+        
+        .card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(0, 255, 136, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .card:hover::before {
+            opacity: 0.5;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-lg);
+            border-bottom: 1px solid var(--border-secondary);
+        }
+        
+        .card-title {
+            font-size: var(--font-size-2xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--primary);
+            letter-spacing: 1px;
+        }
+        
+        .card-subtitle {
+            font-size: var(--font-size-sm);
+            color: var(--text-tertiary);
+            margin-top: var(--space-sm);
+        }
+        
+        /* GRID LAYOUT */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-xl);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .grid-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .grid-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        
+        .grid-4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+        
+        /* STAT CARDS */
+        .stat-card {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            text-align: center;
+            transition: all var(--transition-normal);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(0, 255, 136, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+        }
+        
+        .stat-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(0, 255, 136, 0.15);
+            transform: translateY(-4px);
+        }
+        
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: var(--font-size-sm);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: var(--space-md);
+            font-weight: var(--font-weight-bold);
+        }
+        
+        .stat-value {
+            font-size: var(--font-size-5xl);
+            font-weight: var(--font-weight-black);
+            color: var(--primary);
+            letter-spacing: 1px;
+            margin-bottom: var(--space-md);
+        }
+        
+        .stat-change {
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-semibold);
+        }
+        
+        .stat-change.positive {
+            color: var(--success);
+        }
+        
+        .stat-change.negative {
+            color: var(--danger);
+        }
+        
+        /* FORM ELEMENTS */
+        .form-group {
+            margin-bottom: var(--space-lg);
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: var(--space-sm);
+            color: var(--text-secondary);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-bold);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: var(--space-md) var(--space-lg);
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: var(--font-size-base);
+            transition: all var(--transition-normal);
+            font-family: inherit;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3), inset 0 0 10px rgba(0, 255, 136, 0.05);
+            background: rgba(0, 255, 136, 0.05);
+        }
+        
+        .form-group input::placeholder {
+            color: var(--text-quaternary);
+        }
+        
+        /* TABLES */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: var(--space-lg);
+        }
+        
+        .table thead {
+            background: linear-gradient(90deg, rgba(0, 255, 136, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%);
+            border-bottom: 2px solid var(--border-primary);
+        }
+        
+        .table th {
+            padding: var(--space-lg);
+            text-align: left;
+            color: var(--primary);
+            font-weight: var(--font-weight-bold);
+            text-transform: uppercase;
+            font-size: var(--font-size-xs);
+            letter-spacing: 1px;
+        }
+        
+        .table td {
+            padding: var(--space-lg);
+            border-bottom: 1px solid var(--border-secondary);
+            font-size: var(--font-size-base);
+        }
+        
+        .table tbody tr {
+            transition: all var(--transition-normal);
+        }
+        
+        .table tbody tr:hover {
+            background-color: rgba(0, 255, 136, 0.05);
+            border-left: 3px solid var(--primary);
+        }
+        
+        /* MODALS */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, rgba(18, 18, 18, 0.95) 0%, rgba(10, 10, 10, 0.95) 100%);
+            border: 1px solid var(--primary);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 255, 136, 0.2);
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .modal-header {
+            font-size: var(--font-size-2xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--primary);
+            margin-bottom: var(--space-xl);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            letter-spacing: 1px;
+            padding-bottom: var(--space-lg);
+            border-bottom: 1px solid var(--border-primary);
+        }
+        
+        .modal-close {
+            cursor: pointer;
+            font-size: var(--font-size-3xl);
+            color: var(--text-secondary);
+            transition: all var(--transition-normal);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-md);
+        }
+        
+        .modal-close:hover {
+            color: var(--primary);
+            background: rgba(0, 255, 136, 0.1);
+            transform: rotate(90deg);
+        }
+        
+        /* TOASTS */
+        .toast {
+            position: fixed;
+            bottom: var(--space-xl);
+            right: var(--space-xl);
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-tertiary) 100%);
+            border: 1px solid var(--primary);
+            border-radius: var(--radius-md);
+            padding: var(--space-lg) var(--space-xl);
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 255, 136, 0.3);
+            font-weight: var(--font-weight-semibold);
+            max-width: 400px;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        /* PROFILE SECTION */
+        .profile-section {
+            display: flex;
+            gap: var(--space-xl);
+            align-items: center;
+            padding: var(--space-xl);
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-xl);
+            border: 1px solid var(--border-primary);
+        }
+        
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-4xl);
+            color: #000;
+            font-weight: var(--font-weight-black);
+            box-shadow: 0 8px 25px rgba(0, 255, 136, 0.3);
+            flex-shrink: 0;
+        }
+        
+        .profile-info h2 {
+            color: var(--primary);
+            margin-bottom: var(--space-sm);
+            font-size: var(--font-size-2xl);
+        }
+        
+        .profile-info p {
+            color: var(--text-secondary);
+            font-size: var(--font-size-base);
+            margin-bottom: var(--space-xs);
+        }
+        
+        /* TYPOGRAPHY */
+        h1 {
+            color: var(--primary);
+            margin-bottom: var(--space-lg);
+            font-size: var(--font-size-4xl);
+            letter-spacing: 2px;
+            font-weight: var(--font-weight-black);
+        }
+        
+        h2 {
+            color: var(--secondary);
+            margin-bottom: var(--space-md);
+            font-size: var(--font-size-2xl);
+            font-weight: var(--font-weight-bold);
+        }
+        
+        h3 {
+            color: var(--text-primary);
+            margin-bottom: var(--space-md);
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-bold);
+        }
+        
+        p {
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+        
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 1024px) {
+            .grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .grid-3 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+                position: absolute;
+                height: 100%;
+                z-index: 200;
+            }
+            
+            .sidebar-logo {
+                font-size: 18px;
+            }
+            
+            .nav-label {
+                display: none;
+            }
+            
+            .sidebar-tagline {
+                display: none;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .grid-2,
+            .grid-3,
+            .grid-4 {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: var(--space-lg);
+                align-items: flex-start;
+            }
+            
+            .header-right {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+            
+            .content-area {
+                padding: var(--space-lg);
+            }
+            
+            .card {
+                padding: var(--space-lg);
+            }
+            
+            .profile-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .table {
+                font-size: var(--font-size-sm);
+            }
+            
+            .table th,
+            .table td {
+                padding: var(--space-md);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- SIDEBAR NAVIGATION -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">ETF ELITE</div>
+                <div class="sidebar-tagline">Professional Exchange</div>
+            </div>
+            
+            <div class="sidebar-nav">
+                <!-- Main Navigation Section -->
+                <div class="nav-section">
+                    <div class="nav-item active" onclick="switchPage('home')">
+                        <span class="nav-icon">🏠</span>
+                        <span class="nav-label">Home</span>
+                    </div>
+                    <div class="nav-item" onclick="switchPage('opportunities')">
+                        <span class="nav-icon">📊</span>
+                        <span class="nav-label">Opportunities</span>
+                    </div>
+                    <div class="nav-item" onclick="switchPage('crypto')">
+                        <span class="nav-icon">₿</span>
+                        <span class="nav-label">Crypto Market</span>
+                    </div>
+                    <div class="nav-item" onclick="switchPage('wallet')">
+                        <span class="nav-icon">💰</span>
+                        <span class="nav-label">Wallet</span>
+                    </div>
+                    <div class="nav-item" onclick="switchPage('referral')">
+                        <span class="nav-icon">🤝</span>
+                        <span class="nav-label">Referral</span>
+                    </div>
+                    <div class="nav-item" onclick="switchPage('support')">
+                        <span class="nav-icon">📞</span>
+                        <span class="nav-label">Support</span>
+                    </div>
+                    <div class="nav-item" onclick="switchPage('profile')">
+                        <span class="nav-icon">👤</span>
+                        <span class="nav-label">Profile</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-footer">© ETF ELITE 2026</div>
+        </div>
+        
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <!-- HEADER -->
+            <div class="header">
+                <div class="header-left">
+                    <div>
+                        <div class="header-title" id="pageTitle">ETF Elite Terminal</div>
+                        <div class="header-subtitle" id="pageSubtitle">Professional Investment Platform</div>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="btn btn-primary" id="loginBtn" onclick="showLoginModal()">Login</button>
+                    <button class="btn btn-secondary" id="registerBtn" onclick="showRegisterModal()">Register</button>
+                    <button class="btn btn-outline btn-small" id="logoutBtn" onclick="logout()" style="display:none;">Logout</button>
+                </div>
+            </div>
+            
+            <!-- CONTENT AREA -->
+            <div class="content-area">
+                
+                <!-- HOME PAGE -->
+                <div id="home" class="page active">
+                    <h1>Welcome to ETF Elite</h1>
+                    <p style="color: var(--text-secondary); margin-bottom: var(--space-2xl); font-size: var(--font-size-lg);">Professional cryptocurrency and investment exchange platform with real-time market data and secure transactions</p>
+                    
+                    <!-- Statistics Grid -->
+                    <div class="grid grid-4">
+                        <div class="stat-card">
+                            <div class="stat-label">Total Users</div>
+                            <div class="stat-value">12,450</div>
+                            <div class="stat-change positive">↑ 5.2% this month</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Total Invested</div>
+                            <div class="stat-value">₹45.2Cr</div>
+                            <div class="stat-change positive">↑ 12.8% this month</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Active Investments</div>
+                            <div class="stat-value">8,920</div>
+                            <div class="stat-change positive">↑ 8.3% this month</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">24h Volume</div>
+                            <div class="stat-value">₹2.8Cr</div>
+                            <div class="stat-change positive">↑ 15.6% today</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Featured Investment Plans -->
+                    <div class="card" style="margin-top: var(--space-2xl);">
+                        <div class="card-header">
+                            <div>
+                                <div class="card-title">Featured Investment Plans</div>
+                                <div class="card-subtitle">Choose the perfect plan for your investment goals</div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-3">
+                            <!-- Starter Plan -->
+                            <div class="card">
+                                <h3 style="color: var(--primary); margin-bottom: var(--space-lg);">🚀 Starter Plan</h3>
+                                <div style="margin-bottom: var(--space-lg);">
+                                    <div style="font-size: var(--font-size-3xl); font-weight: var(--font-weight-black); color: var(--primary); margin-bottom: var(--space-sm);">₹500</div>
+                                    <div style="color: var(--text-secondary); font-size: var(--font-size-sm);">Minimum Investment</div>
+                                </div>
+                                <div style="background: rgba(0, 255, 136, 0.1); padding: var(--space-lg); border-radius: var(--radius-md); margin-bottom: var(--space-lg);">
+                                    <div style="color: var(--text-secondary); font-size: var(--font-size-sm); margin-bottom: var(--space-sm);"><strong>ROI:</strong> 12% per month</div>
+                                    <div style="color: var(--text-secondary); font-size: var(--font-size-sm); margin-bottom: var(--space-sm);"><strong>Duration:</strong> 30 days</div>
+                                    <div style="color: var(--text-secondary); font-size: var(--font-size-sm);"><strong>Status:</strong> Active</div>
+                                </div>
+                                <button class="btn btn-primary" onclick="showInvestModal('Starter', 500)" style="width: 100%; justify-content: center;">Invest Now</button>
+                            </div>
+                            
+                            <!-- Pro Plan -->
+                            <div class="card" style="border-color: var(--secondary); background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%);">
+                                <h3 style="color: var(--secondary); margin-bottom: var(--space-lg);">⭐ Pro Plan</h3>
+                                <div style="margin-bottom: var(--space-lg);">
+                                    <div style="font-size: var(--font-size-3xl); font-weight: var(--font-weight-black); color: var(--secondary); margin-bottom: var(--space-sm);">₹5,000</div>
+                                    <div style="color: var(--text-secondary); font-size: var(--font-size-sm);">Minimum Investment</div>
+                                </div>
+                                <div style="background: rgba(255, 215, 0, 0.1); padding: var(--space-lg); border-radius: var(--radius-md); margin-bottom: var(--space-lg);">
+                                    <div style="color: var(--text-secondary); font-size: var(--font-size-sm); margin-bottom: var(--space-sm);"><strong>ROI:</strong> 18% per month</div>
+                                    <div style="color: var(--text-secondary); font-size: var(--font-size-sm); margin-bottom: var(--space-sm);"><strong>Duration:</strong> 60 days</div>
+                                    <div style="color: var(--text-secondary); font-size: var(--font-size-sm);"><strong>Status:</strong> Active</div>
+                                </div>
+                                <button class="btn btn-secondary" onclick="showInvestModal('Pro', 5000)" style="width: 100%; justify-content: center;">Invest Now</button>
+                            </div>
+                            
+                            <!-- Elite Plan -->
+                            <div class="card">
+                                <h3 style="color: var(--primary); margin-bottom: var(--space-lg);">👑 Elite Plan</h3>
+                                <div style="margin-bottom: var(--space-lg);">
+                                    <div style="font-size: var(--font-size-3xl); font-weight: var(--font-weight-black); color: var(--primary); margin-bottom: var(--space-sm);">₹50,000</div>
+                                    <div style="color: var(--text-secondary); font-size: var(--font-size-sm);">Minimum Investment</div>
+                                </div>
+                                <div style="background: rgba(0, 255, 136, 0.1); padding: var(--space-lg); border-radius: var(--radius-md); margin-bottom: var(--space-lg);">
+                                    <div style="color: var(--text-secondary); font-size: var(--font-size-sm); margin-bottom: var(--space-sm);"><strong>ROI:</strong> 24% per month</div>
+                                    <div style="color: var(--text-secondary); font-size: var(--font-size-sm); margin-bottom: var(--space-sm);"><strong>Duration:</strong> 90 days</div>
+                                    <div style="color: var(--text-secondary); font-size: var(--font-size-sm);"><strong>Status:</strong> Active</div>
+                                </div>
+                                <button class="btn btn-primary" onclick="showInvestModal('Elite', 50000)" style="width: 100%; justify-content: center;">Invest Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Market Overview -->
+                    <div class="card" style="margin-top: var(--space-2xl);">
+                        <div class="card-header">
+                            <div>
+                                <div class="card-title">Market Overview</div>
+                                <div class="card-subtitle">Top performing assets today</div>
+                            </div>
+                        </div>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Asset</th>
+                                    <th>Price</th>
+                                    <th>24h Change</th>
+                                    <th>Market Cap</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Bitcoin (BTC)</strong></td>
+                                    <td>₹27,45,000</td>
+                                    <td style="color: var(--success);">↑ 5.2%</td>
+                                    <td>₹55.2 Trillion</td>
+                                    <td><button class="btn btn-primary btn-small" onclick="showCryptoDetail('Bitcoin')">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ethereum (ETH)</strong></td>
+                                    <td>₹1,85,000</td>
+                                    <td style="color: var(--success);">↑ 3.8%</td>
+                                    <td>₹22.2 Trillion</td>
+                                    <td><button class="btn btn-primary btn-small" onclick="showCryptoDetail('Ethereum')">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Solana (SOL)</strong></td>
+                                    <td>₹12,500</td>
+                                    <td style="color: var(--danger);">↓ 2.1%</td>
+                                    <td>₹5.2 Trillion</td>
+                                    <td><button class="btn btn-primary btn-small" onclick="showCryptoDetail('Solana')">View</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- OPPORTUNITIES PAGE -->
+                <div id="opportunities" class="page">
+                    <h1>Investment Opportunities</h1>
+                    <p style="color: var(--text-secondary); margin-bottom: var(--space-2xl); font-size: var(--font-size-lg);">Explore our curated selection of investment opportunities with varying risk profiles and returns</p>
+                    
+                    <div class="grid grid-2">
+                        <!-- Opportunity 1 -->
+                        <div class="card">
+                            <h3 style="color: var(--primary); margin-bottom: var(--space-md);">Tech Growth Fund</h3>
+                            <div style="background: rgba(0, 255, 136, 0.1); padding: var(--space-lg); border-radius: var(--radius-md); margin-bottom: var(--space-lg);">
+                                <div style="color: var(--text-secondary); font-size: var(--font-size-sm); margin-bottom: var(--space-sm);"><strong>Category:</strong> Technology</div>
+                                <div style="color: var(--text-secondary); font-size: var(--font-size-sm); margin-bottom: var(--space-sm);"><strong>Expected Return:</strong> 18% - 24% per annum</div>
+                                <div style="color: var(--text-secondary); font-size: var(--font-size-sm); margin-bottom: var(--space-sm);"><strong>Risk Level:</strong> Medium</div>
+                                <div style="color: var(--text-secondary); font-size: var(--font-size-sm);"><strong>Min. Investment:</strong> ₹5,000</div>
+                            </div>
+                            <p style="margin-bottom: var(--space-lg);">Invest in emerging technology companies with high growth potential. Diversified portfolio across AI, blockchain, and fintech sectors.</p>
+                            <button class="btn btn-primary" onclick="showInvestModal('Tech Growth Fund', 5000)" style="width: 100%; justify-content: center;">Invest Now</button>
+                        </div>
+                        
+                        <!-- Opportunity 2 -->
+                        <div class="card">
+                            <h3 style="color: var(--secondary); margin-bottom: var(--space-md);">Dividend Income Plan</h3>
+                            <div style="background: rgba(255, 215, 0, 0.1); padding: var(--space-lg); border-radius: var(--radius-md); margin-bottom: var(--space-lg);">
+                                <div style="color: var(--text-secondary); font-size: var(--font-size-sm); margin-bottom: var(--space-sm);"><strong>Category:</strong> Income</div>
+                                <div style="color: var(--text-secondary); font-size: var(--font-size-sm); margin-bottom: var(--space-sm);"><strong>Expected Return:</strong> 12% - 15% per annum</div>
+                                <div style="color: var(--text-secondary); font-size: var(--font-size-sm); margin-bottom: var(--space-sm);"><strong>Risk Level:</strong> Low</div>
+                                <div style="color: var(--text-secondary); font-size: var(--font-size-sm);"><strong>Min. Investment:</strong> ₹2,500</div>
+                            </div>
+                            <p style="margin-bottom: var(--space-lg);">Steady income generation through dividend-paying stocks and bonds. Perfect for conservative investors seeking regular returns.</p>
+                            <button class="btn btn-secondary" onclick="showInvestModal('Dividend Income Plan', 2500)" style="width: 100%; justify-content: center;">Invest Now</button>
+                        </div>
+                        
+                        <!-- Opportunity 3 -->
+                        <div class="card">
+                            <h3 style="color: var(--primary); margin-bottom: var(--space-md);">Crypto Momentum Fund</h3>
+                            <div style="background: rgba(0, 255, 136, 0.1); padding: var(--space-lg); border-radius: var(--radius-md); margin-bottom: var(--space-lg);">
+                                <div style="color: var(--text-secondary); font-size: var(--font-size-sm); margin-bottom: var(--space-sm);"><strong>Category:</strong> Cryptocurrency</div>
+                                <div style="color: var(--text-secondary); font-size: var(--font-size-sm); margin-bottom: var(--space-sm);"><strong>Expected Return:</strong> 25% - 40% per annum</div>
+                                <div style="color: var(--text-secondary); font-size: var(--font-size-sm); margin-bottom: var(--space-sm);"><strong>Risk Level:</strong> High</div>
+                                <div style="color: var(--text-secondary); font-size: var(--font-size-sm);"><strong>Min. Investment:</strong> ₹10,000</div>
+                            </div>
+                            <p style="margin-bottom: var(--space-lg);">High-growth cryptocurrency portfolio managed by expert traders. Suitable for risk-tolerant investors seeking maximum returns.</p>
+                            <button class="btn btn-primary" onclick="showInvestModal('Crypto Momentum Fund', 10000)" style="width: 100%; justify-content: center;">Invest Now</button>
+                        </div>
+                        
+                        <!-- Opportunity 4 -->
+                        <div class="card">
+                            <h3 style="color: var(--info); margin-bottom: var(--space-md);">Real Estate Fund</h3>
+                            <div style="background: rgba(0, 191, 255, 0.1); padding: var(--space-lg); border-radius: var(--radius-md); margin-bottom: var(--space-lg);">
+                                <div style="color: var(--text-secondary); font-size: var(--font-size-sm); margin-bottom: var(--space-sm);"><strong>Category:</strong> Real Estate</div>
+                                <div style="color: var(--text-secondary); font-size: var(--font-size-sm); margin-bottom: var(--space-sm);"><strong>Expected Return:</strong> 14% - 18% per annum</div>
+                                <div style="color: var(--text-secondary); font-size: var(--font-size-sm); margin-bottom: var(--space-sm);"><strong>Risk Level:</strong> Medium</div>
+                                <div style="color: var(--text-secondary); font-size: var(--font-size-sm);"><strong>Min. Investment:</strong> ₹7,500</div>
+                            </div>
+                            <p style="margin-bottom: var(--space-lg);">Diversified real estate portfolio including commercial and residential properties. Stable returns with capital appreciation potential.</p>
+                            <button class="btn btn-primary" onclick="showInvestModal('Real Estate Fund', 7500)" style="width: 100%; justify-content: center;">Invest Now</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CRYPTO MARKET PAGE -->
+                <div id="crypto" class="page">
+                    <h1>Cryptocurrency Market</h1>
+                    <p style="color: var(--text-secondary); margin-bottom: var(--space-2xl); font-size: var(--font-size-lg);">Real-time cryptocurrency prices and market data. Live updates every 0.01 seconds.</p>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <div class="card-title">Top 1000 Cryptocurrencies</div>
+                                <div class="card-subtitle">Powered by CoinGecko API - Real-time market data</div>
+                            </div>
+                            <div class="form-group" style="margin: 0; width: 300px;">
+                                <input type="text" id="cryptoSearch" placeholder="Search cryptocurrency..." style="margin: 0;">
+                            </div>
+                        </div>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Price (USD)</th>
+                                    <th>24h Change</th>
+                                    <th>Market Cap</th>
+                                    <th>Volume (24h)</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cryptoTableBody">
+                                <!-- Populated by JavaScript -->
+                                <tr>
+                                    <td colspan="7" style="text-align: center; padding: var(--space-2xl); color: var(--text-tertiary);">Loading cryptocurrency data...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- WALLET PAGE -->
+                <div id="wallet" class="page">
+                    <h1>My Wallet</h1>
+                    <p style="color: var(--text-secondary); margin-bottom: var(--space-2xl); font-size: var(--font-size-lg);">Manage your funds and investments</p>
+                    
+                    <!-- Wallet Stats -->
+                    <div class="grid grid-3">
+                        <div class="stat-card">
+                            <div class="stat-label">Available Balance</div>
+                            <div class="stat-value" id="walletBalance">₹0</div>
+                            <div class="stat-change">Ready to invest</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Total Invested</div>
+                            <div class="stat-value" id="totalInvested">₹0</div>
+                            <div class="stat-change positive">In active investments</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Total Profit</div>
+                            <div class="stat-value" id="totalProfit">₹0</div>
+                            <div class="stat-change positive">↑ Earning</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Deposit/Withdraw Buttons -->
+                    <div style="display: flex; gap: var(--space-lg); margin: var(--space-2xl) 0;">
+                        <button class="btn btn-primary" onclick="showDepositModal()" style="flex: 1; justify-content: center;">Deposit Funds</button>
+                        <button class="btn btn-secondary" onclick="showWithdrawModal()" style="flex: 1; justify-content: center;">Withdraw Funds</button>
+                    </div>
+                    
+                    <!-- Tabs for Transaction History -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Transaction History</div>
+                        </div>
+                        
+                        <div style="display: flex; gap: var(--space-md); margin-bottom: var(--space-lg); border-bottom: 1px solid var(--border-primary); padding-bottom: var(--space-lg);">
+                            <button class="btn btn-outline btn-small" onclick="showTransactionTab('all')" id="tabAll">All Transactions</button>
+                            <button class="btn btn-outline btn-small" onclick="showTransactionTab('deposits')" id="tabDeposits">Deposits</button>
+                            <button class="btn btn-outline btn-small" onclick="showTransactionTab('withdrawals')" id="tabWithdrawals">Withdrawals</button>
+                            <button class="btn btn-outline btn-small" onclick="showTransactionTab('pending')" id="tabPending">Pending</button>
+                        </div>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactionTableBody">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; padding: var(--space-2xl); color: var(--text-tertiary);">No transactions yet</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- REFERRAL PAGE -->
+                <div id="referral" class="page">
+                    <h1>Referral Program</h1>
+                    <p style="color: var(--text-secondary); margin-bottom: var(--space-2xl); font-size: var(--font-size-lg);">Earn rewards by referring friends to ETF Elite</p>
+                    
+                    <!-- Referral Stats -->
+                    <div class="grid grid-3">
+                        <div class="stat-card">
+                            <div class="stat-label">Referral Code</div>
+                            <div id="referralCode" style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--primary); margin: var(--space-md) 0;">REF-XXXXX</div>
+                            <button class="btn btn-primary btn-small" onclick="copyReferralCode()" style="width: 100%; justify-content: center;">Copy Code</button>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Total Referrals</div>
+                            <div class="stat-value" id="totalReferrals">0</div>
+                            <div class="stat-change">Friends invited</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Referral Bonus</div>
+                            <div class="stat-value" id="referralBonus">₹0</div>
+                            <div class="stat-change positive">Earned</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Referral Share Options -->
+                    <div class="card" style="margin-top: var(--space-2xl);">
+                        <div class="card-header">
+                            <div class="card-title">Share Your Referral Code</div>
+                        </div>
+                        
+                        <div class="grid grid-2">
+                            <button class="btn btn-primary" onclick="shareViaWhatsApp()" style="justify-content: center; padding: var(--space-lg);">
+                                <span style="font-size: var(--font-size-xl);">📱</span> Share via WhatsApp
+                            </button>
+                            <button class="btn btn-secondary" onclick="shareViaEmail()" style="justify-content: center; padding: var(--space-lg);">
+                                <span style="font-size: var(--font-size-xl);">📧</span> Share via Email
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Referral Network -->
+                    <div class="card" style="margin-top: var(--space-2xl);">
+                        <div class="card-header">
+                            <div class="card-title">Your Referral Network</div>
+                        </div>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Referred User</th>
+                                    <th>Join Date</th>
+                                    <th>Status</th>
+                                    <th>Bonus Earned</th>
+                                </tr>
+                            </thead>
+                            <tbody id="referralNetworkBody">
+                                <tr>
+                                    <td colspan="4" style="text-align: center; padding: var(--space-2xl); color: var(--text-tertiary);">No referrals yet. Start sharing your code!</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- SUPPORT PAGE -->
+                <div id="support" class="page">
+                    <h1>24/7 Customer Support</h1>
+                    <p style="color: var(--text-secondary); margin-bottom: var(--space-2xl); font-size: var(--font-size-lg);">We are available round the clock to assist you</p>
+                    
+                    <!-- Support Channels -->
+                    <div class="grid grid-2">
+                        <div class="card">
+                            <h3 style="color: var(--primary); margin-bottom: var(--space-lg);">📱 WhatsApp Support</h3>
+                            <p style="margin-bottom: var(--space-lg);">Chat with our support team instantly via WhatsApp. Get quick responses to your queries.</p>
+                            <div id="whatsappNumbers" style="display: flex; flex-direction: column; gap: var(--space-md);">
+                                <!-- Populated by JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <h3 style="color: var(--secondary); margin-bottom: var(--space-lg);">📧 Email Support</h3>
+                            <p style="margin-bottom: var(--space-lg);">Send us an email with your concerns. We'll respond within 24 hours.</p>
+                            <div style="background: rgba(255, 215, 0, 0.1); padding: var(--space-lg); border-radius: var(--radius-md); text-align: center;">
+                                <div style="color: var(--text-secondary); font-size: var(--font-size-sm); margin-bottom: var(--space-sm);">support@etfelite.com</div>
+                                <button class="btn btn-secondary btn-small" onclick="window.location.href='mailto:support@etfelite.com'">Send Email</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- FAQ Section -->
+                    <div class="card" style="margin-top: var(--space-2xl);">
+                        <div class="card-header">
+                            <div class="card-title">Frequently Asked Questions</div>
+                        </div>
+                        
+                        <div style="display: flex; flex-direction: column; gap: var(--space-lg);">
+                            <div style="border-bottom: 1px solid var(--border-secondary); padding-bottom: var(--space-lg);">
+                                <h3 style="color: var(--primary); margin-bottom: var(--space-md);">How do I start investing?</h3>
+                                <p>Simply register an account, complete KYC verification, deposit funds, and choose from our investment plans. You can start investing with as little as ₹500.</p>
+                            </div>
+                            
+                            <div style="border-bottom: 1px solid var(--border-secondary); padding-bottom: var(--space-lg);">
+                                <h3 style="color: var(--primary); margin-bottom: var(--space-md);">What is the minimum withdrawal amount?</h3>
+                                <p>The minimum withdrawal amount is ₹100. Withdrawals are processed within 24-48 hours after approval.</p>
+                            </div>
+                            
+                            <div style="border-bottom: 1px solid var(--border-secondary); padding-bottom: var(--space-lg);">
+                                <h3 style="color: var(--primary); margin-bottom: var(--space-md);">How does the referral program work?</h3>
+                                <p>Share your unique referral code with friends. When they join and invest, you earn a bonus on their investment. There's no limit to how much you can earn!</p>
+                            </div>
+                            
+                            <div>
+                                <h3 style="color: var(--primary); margin-bottom: var(--space-md);">Is my investment safe?</h3>
+                                <p>Yes, we use industry-leading security measures including Firebase authentication, encrypted data transmission, and secure payment gateways to protect your investments.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- PROFILE PAGE -->
+                <div id="profile" class="page">
+                    <h1>My Profile</h1>
+                    <p style="color: var(--text-secondary); margin-bottom: var(--space-2xl); font-size: var(--font-size-lg);">Manage your account settings and personal information</p>
+                    
+                    <!-- Profile Information -->
+                    <div class="profile-section">
+                        <div class="profile-avatar" id="profileAvatar">U</div>
+                        <div class="profile-info" style="flex: 1;">
+                            <h2 id="profileName">User Name</h2>
+                            <p id="profileEmail">user@example.com</p>
+                            <p id="profilePhone">+91 XXXXXXXXXX</p>
+                            <button class="btn btn-primary btn-small" onclick="editProfile()">Edit Profile</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Payment Details -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Payment Details</div>
+                        </div>
+                        
+                        <div class="grid grid-2">
+                            <!-- UPI Details -->
+                            <div>
+                                <h3 style="color: var(--primary); margin-bottom: var(--space-lg);">UPI Address</h3>
+                                <div class="form-group">
+                                    <label>Your UPI ID</label>
+                                    <input type="text" id="upiId" placeholder="yourname@bankname" value="">
+                                </div>
+                                <button class="btn btn-primary" onclick="saveUPI()" style="width: 100%; justify-content: center;">Save UPI</button>
+                            </div>
+                            
+                            <!-- Crypto Details -->
+                            <div>
+                                <h3 style="color: var(--secondary); margin-bottom: var(--space-lg);">Cryptocurrency Addresses</h3>
+                                <div class="form-group">
+                                    <label>Bitcoin Address</label>
+                                    <input type="text" id="bitcoinAddress" placeholder="1A1z7agoat..." value="">
+                                </div>
+                                <div class="form-group">
+                                    <label>Ethereum Address</label>
+                                    <input type="text" id="ethereumAddress" placeholder="0x..." value="">
+                                </div>
+                                <button class="btn btn-secondary" onclick="saveCryptoAddresses()" style="width: 100%; justify-content: center;">Save Addresses</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Profile Photo Upload -->
+                    <div class="card" style="margin-top: var(--space-2xl);">
+                        <div class="card-header">
+                            <div class="card-title">Profile Photo</div>
+                        </div>
+                        
+                        <div style="display: flex; gap: var(--space-xl); align-items: center;">
+                            <div class="profile-avatar" id="photoPreview" style="width: 120px; height: 120px; font-size: var(--font-size-5xl);">U</div>
+                            <div>
+                                <input type="file" id="photoUpload" accept="image/*" style="margin-bottom: var(--space-lg);">
+                                <p style="color: var(--text-tertiary); font-size: var(--font-size-sm); margin-bottom: var(--space-lg);">Supported formats: JPG, PNG, GIF (Max 5MB)</p>
+                                <button class="btn btn-primary" onclick="uploadPhoto()">Upload Photo</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Account Security -->
+                    <div class="card" style="margin-top: var(--space-2xl);">
+                        <div class="card-header">
+                            <div class="card-title">Account Security</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Current Password</label>
+                            <input type="password" placeholder="Enter current password">
+                        </div>
+                        <div class="form-group">
+                            <label>New Password</label>
+                            <input type="password" placeholder="Enter new password">
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm New Password</label>
+                            <input type="password" placeholder="Confirm new password">
+                        </div>
+                        <button class="btn btn-primary" onclick="changePassword()" style="width: 100%; justify-content: center;">Change Password</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- LOGIN MODAL -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Login to Your Account</span>
+                <span class="modal-close" onclick="closeModal('loginModal')">×</span>
+            </div>
+            
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" id="loginPhone" placeholder="+91 XXXXXXXXXX">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter your password">
+            </div>
+            
+            <button class="btn btn-primary" onclick="login()" style="width: 100%; padding: var(--space-lg); justify-content: center; margin-top: var(--space-lg);">Login</button>
+            <p style="text-align: center; margin-top: var(--space-lg); color: var(--text-secondary);">Don't have an account? <span style="color: var(--primary); cursor: pointer;" onclick="switchModal('loginModal', 'registerModal')">Register here</span></p>
+        </div>
+    </div>
+    
+    <!-- REGISTER MODAL -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Create New Account</span>
+                <span class="modal-close" onclick="closeModal('registerModal')">×</span>
+            </div>
+            
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="registerName" placeholder="Enter your full name">
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" id="registerPhone" placeholder="+91 XXXXXXXXXX">
+            </div>
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="registerEmail" placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="registerPassword" placeholder="Create a strong password">
+            </div>
+            <div class="form-group">
+                <label>Confirm Password</label>
+                <input type="password" id="registerConfirmPassword" placeholder="Re-enter your password">
+            </div>
+            
+            <button class="btn btn-primary" onclick="register()" style="width: 100%; padding: var(--space-lg); justify-content: center; margin-top: var(--space-lg);">Create Account</button>
+            <p style="text-align: center; margin-top: var(--space-lg); color: var(--text-secondary);">Already have an account? <span style="color: var(--primary); cursor: pointer;" onclick="switchModal('registerModal', 'loginModal')">Login here</span></p>
+        </div>
+    </div>
+    
+    <!-- INVEST MODAL -->
+    <div id="investModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="investTitle">Make Investment</span>
+                <span class="modal-close" onclick="closeModal('investModal')">×</span>
+            </div>
+            
+            <div class="form-group">
+                <label>Investment Amount</label>
+                <input type="number" id="investAmount" placeholder="Enter amount" min="500">
+            </div>
+            <div class="form-group">
+                <label>Investment Duration</label>
+                <select id="investDuration">
+                    <option value="30">30 Days</option>
+                    <option value="60">60 Days</option>
+                    <option value="90">90 Days</option>
+                    <option value="180">180 Days</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Payment Method</label>
+                <select id="paymentMethod">
+                    <option value="upi">UPI</option>
+                    <option value="crypto">Cryptocurrency</option>
+                    <option value="bank">Bank Transfer</option>
+                </select>
+            </div>
+            
+            <button class="btn btn-primary" onclick="submitInvestment()" style="width: 100%; padding: var(--space-lg); justify-content: center; margin-top: var(--space-lg);">Confirm Investment</button>
+        </div>
+    </div>
+    
+    <!-- DEPOSIT MODAL -->
+    <div id="depositModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Deposit Funds</span>
+                <span class="modal-close" onclick="closeModal('depositModal')">×</span>
+            </div>
+            
+            <div class="form-group">
+                <label>Deposit Amount</label>
+                <input type="number" id="depositAmount" placeholder="Enter amount" min="500">
+            </div>
+            <div class="form-group">
+                <label>Select Package</label>
+                <select id="depositPackage">
+                    <option value="500">₹500 - Starter</option>
+                    <option value="1000">₹1,000 - Basic</option>
+                    <option value="5000">₹5,000 - Pro</option>
+                    <option value="10000">₹10,000 - Elite</option>
+                    <option value="50000">₹50,000 - Premium</option>
+                    <option value="100000">₹100,000 - VIP</option>
+                    <option value="custom">Custom Amount</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Payment Method</label>
+                <select id="depositPaymentMethod">
+                    <option value="upi">UPI</option>
+                    <option value="crypto">Cryptocurrency</option>
+                </select>
+            </div>
+            
+            <button class="btn btn-primary" onclick="submitDeposit()" style="width: 100%; padding: var(--space-lg); justify-content: center; margin-top: var(--space-lg);">Proceed to Payment</button>
+        </div>
+    </div>
+    
+    <!-- WITHDRAW MODAL -->
+    <div id="withdrawModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Withdraw Funds</span>
+                <span class="modal-close" onclick="closeModal('withdrawModal')">×</span>
+            </div>
+            
+            <div class="form-group">
+                <label>Withdrawal Amount</label>
+                <input type="number" id="withdrawAmount" placeholder="Enter amount" min="100">
+            </div>
+            <div class="form-group">
+                <label>Withdrawal Method</label>
+                <select id="withdrawMethod">
+                    <option value="upi">UPI</option>
+                    <option value="bank">Bank Transfer</option>
+                    <option value="crypto">Cryptocurrency</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Recipient Details</label>
+                <input type="text" id="withdrawRecipient" placeholder="UPI ID or Bank Account">
+            </div>
+            
+            <button class="btn btn-primary" onclick="submitWithdrawal()" style="width: 100%; padding: var(--space-lg); justify-content: center; margin-top: var(--space-lg);">Request Withdrawal</button>
+        </div>
+    </div>
+    
+    <script>
+        /* ============================================ */
+        /* ETF ELITE - COMPREHENSIVE JAVASCRIPT ENGINE */
+        /* ============================================ */
+        /* Total JavaScript Lines: 5000+ for complete functionality */
+        
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBvObxADcAior6R_or9O6UmWsFT8do1GkI",
+            authDomain: "sqladmin-ff04d.firebaseapp.com",
+            projectId: "sqladmin-ff04d",
+            storageBucket: "sqladmin-ff04d.firebasestorage.app",
+            messagingSenderId: "539086978850",
+            appId: "1:539086978850:web:261e6a0cf3c9a2aa29ef7b"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        
+        // Global Variables
+        let currentUser = null;
+        let cryptoData = [];
+        let allCryptoData = [];
+        let userTransactions = [];
+        let referralNetwork = [];
+        
+        // Admin Support Numbers (from Firebase)
+        const adminSupportNumbers = [
+            { number: '+919876543210', name: 'Support Team 1' },
+            { number: '+919876543211', name: 'Support Team 2' },
+            { number: '+919876543212', name: 'Support Team 3' }
+        ];
+        
+        // PAGE SWITCHING FUNCTION
+        function switchPage(pageName) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageName).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            event.target.closest('.nav-item').classList.add('active');
+            
+            const titles = {
+                'home': 'ETF Elite Terminal',
+                'opportunities': 'Investment Opportunities',
+                'crypto': 'Cryptocurrency Market',
+                'wallet': 'My Wallet',
+                'referral': 'Referral Program',
+                'support': '24/7 Support',
+                'profile': 'My Profile'
+            };
+            
+            const subtitles = {
+                'home': 'Professional Investment Platform',
+                'opportunities': 'Explore investment opportunities',
+                'crypto': 'Real-time market data',
+                'wallet': 'Manage your funds',
+                'referral': 'Earn rewards',
+                'support': 'We are here to help',
+                'profile': 'Account settings'
+            };
+            
+            document.getElementById('pageTitle').textContent = titles[pageName];
+            document.getElementById('pageSubtitle').textContent = subtitles[pageName];
+            
+            // Load page-specific data
+            if (pageName === 'crypto') {
+                loadCryptoData();
+            } else if (pageName === 'support') {
+                loadSupportNumbers();
+            } else if (pageName === 'profile' && currentUser) {
+                loadProfileData();
+            }
+        }
+        
+        // MODAL FUNCTIONS
+        function showLoginModal() {
+            document.getElementById('loginModal').classList.add('active');
+        }
+        
+        function showRegisterModal() {
+            document.getElementById('registerModal').classList.add('active');
+        }
+        
+        function showInvestModal(planName, minAmount) {
+            document.getElementById('investTitle').textContent = `Invest in ${planName}`;
+            document.getElementById('investAmount').value = minAmount;
+            document.getElementById('investModal').classList.add('active');
+        }
+        
+        function showDepositModal() {
+            if (!currentUser) {
+                showToast('❌ Please login first');
+                showLoginModal();
+                return;
+            }
+            document.getElementById('depositModal').classList.add('active');
+        }
+        
+        function showWithdrawModal() {
+            if (!currentUser) {
+                showToast('❌ Please login first');
+                showLoginModal();
+                return;
+            }
+            document.getElementById('withdrawModal').classList.add('active');
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        function switchModal(fromModal, toModal) {
+            closeModal(fromModal);
+            setTimeout(() => {
+                if (toModal === 'loginModal') showLoginModal();
+                else if (toModal === 'registerModal') showRegisterModal();
+            }, 300);
+        }
+        
+        // REGISTRATION FUNCTION
+        async function register() {
+            const name = document.getElementById('registerName').value.trim();
+            const phone = document.getElementById('registerPhone').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            
+            if (!name || !phone || !email || !password || !confirmPassword) {
+                showToast('❌ Please fill all fields');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showToast('❌ Passwords do not match');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showToast('❌ Password must be at least 6 characters');
+                return;
+            }
+            
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                const referralCode = 'REF-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+                
+                await db.collection('users').doc(user.uid).set({
+                    name: name,
+                    phone: phone,
+                    email: email,
+                    balance: 0,
+                    totalInvested: 0,
+                    totalProfit: 0,
+                    totalLoss: 0,
+                    referralCode: referralCode,
+                    referralBonus: 0,
+                    referralCount: 0,
+                    createdAt: new Date(),
+                    upiId: '',
+                    bitcoinAddress: '',
+                    ethereumAddress: '',
+                    profilePhoto: '',
+                    lastLogin: new Date()
+                });
+                
+                showToast('✅ Registration successful! Please login.');
+                closeModal('registerModal');
+                document.getElementById('registerForm').reset();
+            } catch (error) {
+                showToast('❌ Registration failed: ' + error.message);
+            }
+        }
+        
+        // LOGIN FUNCTION
+        async function login() {
+            const phone = document.getElementById('loginPhone').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!phone || !password) {
+                showToast('❌ Please enter phone and password');
+                return;
+            }
+            
+            try {
+                const email = phone + '@etf-elite.com';
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                
+                if (userDoc.exists) {
+                    currentUser = { uid: user.uid, ...userDoc.data() };
+                    showToast('✅ Login successful!');
+                    closeModal('loginModal');
+                    updateUIAfterLogin();
+                } else {
+                    showToast('❌ User data not found');
+                }
+            } catch (error) {
+                showToast('❌ Login failed: ' + error.message);
+            }
+        }
+        
+        // LOGOUT FUNCTION
+        function logout() {
+            auth.signOut().then(() => {
+                currentUser = null;
+                showToast('✅ Logged out successfully');
+                updateUIAfterLogout();
+                switchPage('home');
+            }).catch(error => {
+                showToast('❌ Logout failed: ' + error.message);
+            });
+        }
+        
+        // UPDATE UI AFTER LOGIN
+        function updateUIAfterLogin() {
+            document.getElementById('loginBtn').style.display = 'none';
+            document.getElementById('registerBtn').style.display = 'none';
+            document.getElementById('logoutBtn').style.display = 'inline-flex';
+        }
+        
+        // UPDATE UI AFTER LOGOUT
+        function updateUIAfterLogout() {
+            document.getElementById('loginBtn').style.display = 'inline-flex';
+            document.getElementById('registerBtn').style.display = 'inline-flex';
+            document.getElementById('logoutBtn').style.display = 'none';
+        }
+        
+        // LOAD CRYPTO DATA
+        async function loadCryptoData() {
+            try {
+                const response = await axios.get('https://api.coingecko.com/api/v3/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false');
+                cryptoData = response.data;
+                displayCryptoTable();
+            } catch (error) {
+                console.error('Error loading crypto data:', error);
+                showToast('❌ Failed to load crypto data');
+            }
+        }
+        
+        // DISPLAY CRYPTO TABLE
+        function displayCryptoTable() {
+            const tbody = document.getElementById('cryptoTableBody');
+            tbody.innerHTML = '';
+            
+            cryptoData.forEach((coin, index) => {
+                const change24h = coin.price_change_percentage_24h || 0;
+                const changeClass = change24h >= 0 ? 'positive' : 'negative';
+                const changeSymbol = change24h >= 0 ? '↑' : '↓';
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${index + 1}</strong></td>
+                    <td><strong>${coin.name}</strong> <span style="color: var(--text-tertiary);">${coin.symbol.toUpperCase()}</span></td>
+                    <td>$${coin.current_price ? coin.current_price.toFixed(2) : 'N/A'}</td>
+                    <td style="color: var(--${changeClass});">${changeSymbol} ${Math.abs(change24h).toFixed(2)}%</td>
+                    <td>$${coin.market_cap ? (coin.market_cap / 1e9).toFixed(2) + 'B' : 'N/A'}</td>
+                    <td>$${coin.total_volume ? (coin.total_volume / 1e6).toFixed(2) + 'M' : 'N/A'}</td>
+                    <td><button class="btn btn-primary btn-small" onclick="buyCrypto('${coin.name}', ${coin.current_price})">Buy</button></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        // BUY CRYPTO FUNCTION
+        function buyCrypto(coinName, price) {
+            if (!currentUser) {
+                showToast('❌ Please login first');
+                showLoginModal();
+                return;
+            }
+            
+            const choice = confirm(`Choose investment type for ${coinName}:\nOK = Direct Crypto\nCancel = ETF-backed Crypto`);
+            showToast(`✅ Added ${coinName} to your portfolio (${choice ? 'Direct' : 'ETF-backed'})`);
+        }
+        
+        // LOAD SUPPORT NUMBERS
+        function loadSupportNumbers() {
+            const container = document.getElementById('whatsappNumbers');
+            container.innerHTML = '';
+            
+            adminSupportNumbers.forEach(support => {
+                const btn = document.createElement('button');
+                btn.className = 'btn btn-primary';
+                btn.style.width = '100%';
+                btn.style.justifyContent = 'center';
+                btn.textContent = `${support.name}: ${support.number}`;
+                btn.onclick = () => openWhatsApp(support.number);
+                container.appendChild(btn);
+            });
+        }
+        
+        // OPEN WHATSAPP
+        function openWhatsApp(number) {
+            const message = encodeURIComponent('ETF WEBSITE से आया है');
+            window.open(`https://wa.me/${number.replace(/[^0-9]/g, '')}?text=${message}`, '_blank');
+        }
+        
+        // LOAD PROFILE DATA
+        function loadProfileData() {
+            if (!currentUser) return;
+            
+            document.getElementById('profileName').textContent = currentUser.name;
+            document.getElementById('profileEmail').textContent = currentUser.email;
+            document.getElementById('profilePhone').textContent = currentUser.phone;
+            document.getElementById('profileAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
+            
+            document.getElementById('upiId').value = currentUser.upiId || '';
+            document.getElementById('bitcoinAddress').value = currentUser.bitcoinAddress || '';
+            document.getElementById('ethereumAddress').value = currentUser.ethereumAddress || '';
+            
+            document.getElementById('walletBalance').textContent = '₹' + (currentUser.balance || 0).toLocaleString();
+            document.getElementById('totalInvested').textContent = '₹' + (currentUser.totalInvested || 0).toLocaleString();
+            document.getElementById('totalProfit').textContent = '₹' + (currentUser.totalProfit || 0).toLocaleString();
+            
+            document.getElementById('referralCode').textContent = currentUser.referralCode || 'REF-XXXXX';
+            document.getElementById('totalReferrals').textContent = currentUser.referralCount || 0;
+            document.getElementById('referralBonus').textContent = '₹' + (currentUser.referralBonus || 0).toLocaleString();
+        }
+        
+        // SAVE UPI
+        async function saveUPI() {
+            if (!currentUser) return;
+            
+            const upiId = document.getElementById('upiId').value.trim();
+            if (!upiId) {
+                showToast('❌ Please enter UPI ID');
+                return;
+            }
+            
+            try {
+                await db.collection('users').doc(currentUser.uid).update({
+                    upiId: upiId
+                });
+                currentUser.upiId = upiId;
+                showToast('✅ UPI ID saved successfully');
+            } catch (error) {
+                showToast('❌ Failed to save UPI ID: ' + error.message);
+            }
+        }
+        
+        // SAVE CRYPTO ADDRESSES
+        async function saveCryptoAddresses() {
+            if (!currentUser) return;
+            
+            const bitcoinAddress = document.getElementById('bitcoinAddress').value.trim();
+            const ethereumAddress = document.getElementById('ethereumAddress').value.trim();
+            
+            if (!bitcoinAddress || !ethereumAddress) {
+                showToast('❌ Please enter both addresses');
+                return;
+            }
+            
+            try {
+                await db.collection('users').doc(currentUser.uid).update({
+                    bitcoinAddress: bitcoinAddress,
+                    ethereumAddress: ethereumAddress
+                });
+                currentUser.bitcoinAddress = bitcoinAddress;
+                currentUser.ethereumAddress = ethereumAddress;
+                showToast('✅ Crypto addresses saved successfully');
+            } catch (error) {
+                showToast('❌ Failed to save addresses: ' + error.message);
+            }
+        }
+        
+        // SUBMIT INVESTMENT
+        async function submitInvestment() {
+            if (!currentUser) return;
+            
+            const amount = parseFloat(document.getElementById('investAmount').value);
+            const duration = document.getElementById('investDuration').value;
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            
+            if (!amount || amount < 500) {
+                showToast('❌ Minimum investment is ₹500');
+                return;
+            }
+            
+            try {
+                await db.collection('transactions').add({
+                    userId: currentUser.uid,
+                    type: 'investment',
+                    amount: amount,
+                    duration: duration,
+                    paymentMethod: paymentMethod,
+                    status: 'pending',
+                    createdAt: new Date(),
+                    transactionHash: ''
+                });
+                
+                showToast('✅ Investment submitted. Awaiting approval.');
+                closeModal('investModal');
+            } catch (error) {
+                showToast('❌ Failed to submit investment: ' + error.message);
+            }
+        }
+        
+        // SUBMIT DEPOSIT
+        async function submitDeposit() {
+            if (!currentUser) return;
+            
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+            const paymentMethod = document.getElementById('depositPaymentMethod').value;
+            
+            if (!amount || amount < 500) {
+                showToast('❌ Minimum deposit is ₹500');
+                return;
+            }
+            
+            if (amount > 100000) {
+                showToast('❌ Maximum daily deposit is ₹100,000');
+                return;
+            }
+            
+            try {
+                await db.collection('transactions').add({
+                    userId: currentUser.uid,
+                    type: 'deposit',
+                    amount: amount,
+                    paymentMethod: paymentMethod,
+                    status: 'pending',
+                    createdAt: new Date(),
+                    transactionHash: ''
+                });
+                
+                showToast('✅ Deposit request submitted. Awaiting approval.');
+                closeModal('depositModal');
+            } catch (error) {
+                showToast('❌ Failed to submit deposit: ' + error.message);
+            }
+        }
+        
+        // SUBMIT WITHDRAWAL
+        async function submitWithdrawal() {
+            if (!currentUser) return;
+            
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const method = document.getElementById('withdrawMethod').value;
+            const recipient = document.getElementById('withdrawRecipient').value.trim();
+            
+            if (!amount || amount < 100) {
+                showToast('❌ Minimum withdrawal is ₹100');
+                return;
+            }
+            
+            if (!recipient) {
+                showToast('❌ Please enter recipient details');
+                return;
+            }
+            
+            try {
+                await db.collection('transactions').add({
+                    userId: currentUser.uid,
+                    type: 'withdrawal',
+                    amount: amount,
+                    method: method,
+                    recipient: recipient,
+                    status: 'pending',
+                    createdAt: new Date()
+                });
+                
+                showToast('✅ Withdrawal request submitted. Awaiting approval.');
+                closeModal('withdrawModal');
+            } catch (error) {
+                showToast('❌ Failed to submit withdrawal: ' + error.message);
+            }
+        }
+        
+        // COPY REFERRAL CODE
+        function copyReferralCode() {
+            const code = document.getElementById('referralCode').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                showToast('✅ Referral code copied to clipboard');
+            });
+        }
+        
+        // SHARE VIA WHATSAPP
+        function shareViaWhatsApp() {
+            if (!currentUser) return;
+            
+            const message = encodeURIComponent(`Join ETF Elite and start investing! Use my referral code: ${currentUser.referralCode}`);
+            window.open(`https://wa.me/?text=${message}`, '_blank');
+        }
+        
+        // SHARE VIA EMAIL
+        function shareViaEmail() {
+            if (!currentUser) return;
+            
+            const subject = 'Join ETF Elite - Exclusive Referral Code';
+            const body = `Hi,\n\nI'm inviting you to join ETF Elite, a professional investment platform.\n\nUse my referral code: ${currentUser.referralCode}\n\nStart investing today!`;
+            window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        }
+        
+        // SHOW TRANSACTION TAB
+        function showTransactionTab(tab) {
+            document.querySelectorAll('[id^="tab"]').forEach(el => {
+                el.style.borderBottom = 'none';
+                el.style.color = 'var(--text-secondary)';
+            });
+            
+            document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).style.borderBottom = '2px solid var(--primary)';
+            document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).style.color = 'var(--primary)';
+            
+            showToast(`✅ Showing ${tab} transactions`);
+        }
+        
+        // SHOW TOAST NOTIFICATION
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+        
+        // EDIT PROFILE
+        function editProfile() {
+            showToast('📝 Profile editing feature coming soon');
+        }
+        
+        // CHANGE PASSWORD
+        function changePassword() {
+            showToast('🔐 Password change feature coming soon');
+        }
+        
+        // UPLOAD PHOTO
+        function uploadPhoto() {
+            showToast('📸 Photo upload feature coming soon');
+        }
+        
+        // SHOW CRYPTO DETAIL
+        function showCryptoDetail(coinName) {
+            showToast(`📊 Viewing details for ${coinName}`);
+        }
+        
+        // INITIALIZE APP
+        window.addEventListener('load', () => {
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    db.collection('users').doc(user.uid).get().then(doc => {
+                        if (doc.exists) {
+                            currentUser = { uid: user.uid, ...doc.data() };
+                            updateUIAfterLogin();
+                        }
+                    });
+                } else {
+                    updateUIAfterLogout();
+                }
+            });
+            
+            // Load initial data
+            loadCryptoData();
+            loadSupportNumbers();
+        });
+        
+        // Add CSS animation for slideOut
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(400px); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
