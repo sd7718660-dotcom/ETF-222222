@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitget | Spot Trading</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lightweight-charts@4.1.0/dist/lightweight-charts.standalone.production.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bgDark: '#0d1117',
+                        bgCard: '#161b22',
+                        bgHover: '#1c2128',
+                        border: '#30363d',
+                        textGray: '#8b949e',
+                        buyGreen: '#00c853',
+                        sellRed: '#ff3d00',
+                        accent: '#58a6ff'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Roboto Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: #0d1117; 
+            color: #e6edf3; 
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .order-book-row { 
+            display: flex; 
+            font-size: 11px; 
+            padding: 1px 8px;
+            cursor: pointer;
+            position: relative;
+        }
+        .order-book-row:hover { background: #1c2128; }
+        
+        .depth-bar {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            opacity: 0.15;
+            z-index: 0;
+        }
+        
+        .buy-bar { background: #00c853; }
+        .sell-bar { background: #ff3d00; }
+        
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #0d1117; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #30363d; border-radius: 2px; }
+        
+        .tab-btn {
+            padding: 8px 16px;
+            font-size: 13px;
+            color: #8b949e;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        .tab-btn.active {
+            color: #e6edf3;
+            border-bottom-color: #58a6ff;
+        }
+        
+        .trade-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        .trade-btn.buy { background: #00c853; color: #000; }
+        .trade-btn.sell { background: #ff3d00; color: #fff; }
+        .trade-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        
+        .input-group {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 4px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .input-group:focus-within { border-color: #58a6ff; }
+        .input-group input {
+            background: transparent;
+            border: none;
+            color: #e6edf3;
+            width: 100%;
+            outline: none;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 14px;
+        }
+        .input-group span {
+            color: #8b949e;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+        
+        .percentage-btn {
+            padding: 4px 8px;
+            background: #21262d;
+            border: 1px solid #30363d;
+            color: #8b949e;
+            font-size: 11px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .percentage-btn:hover {
+            background: #30363d;
+            color: #e6edf3;
+        }
+        
+        .chart-container {
+            height: 520px;
+            background: #0d1117;
+            border-right: 1px solid #30363d;
+            border-bottom: 1px solid #30363d;
+        }
+        
+        .order-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 12px;
+            font-size: 12px;
+            border-bottom: 1px solid #21262d;
+        }
+        
+        .nav-item {
+            padding: 8px 16px;
+            color: #8b949e;
+            font-size: 14px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .nav-item:hover { color: #e6edf3; }
+        
+        .pair-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #161b22;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .price-ticker {
+            display: flex;
+            gap: 24px;
+            padding: 0 24px;
+            border-left: 1px solid #30363d;
+        }
+        .ticker-item {
+            display: flex;
+            flex-direction: column;
+        }
+        .ticker-label {
+            font-size: 11px;
+            color: #8b949e;
+        }
+        .ticker-value {
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .ticker-value.up { color: #00c853; }
+        .ticker-value.down { color: #ff3d00; }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header style="height: 64px; background: #161b22; border-bottom: 1px solid #30363d; display: flex; align-items: center; padding: 0 24px; position: sticky; top: 0; z-index: 100;">
+        <div style="display: flex; align-items: center; gap: 32px; flex: 1;">
+            <!-- Logo -->
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 700; color: #00c853;">
+                <i class="fas fa-chart-line"></i>
+                <span>Bitget</span>
+            </div>
+            
+            <!-- Navigation -->
+            <nav style="display: flex; gap: 8px;">
+                <div class="nav-item">Buy Crypto</div>
+                <div class="nav-item" style="color: #e6edf3;">Spot</div>
+                <div class="nav-item">Futures</div>
+                <div class="nav-item">Margin</div>
+                <div class="nav-item">Copy Trading</div>
+                <div class="nav-item">Earn</div>
+                <div class="nav-item">More <i class="fas fa-chevron-down" style="font-size: 10px;"></i></div>
+            </nav>
+        </div>
+        
+        <!-- Right Side -->
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <button style="background: #00c853; color: #000; padding: 6px 16px; border-radius: 4px; font-weight: 600; font-size: 13px; border: none; cursor: pointer;">Deposit</button>
+            <div style="color: #8b949e; font-size: 13px;">Assets <span style="color: #e6edf3;">$0.00</span></div>
+            <i class="fas fa-bell" style="color: #8b949e; cursor: pointer;"></i>
+            <i class="fas fa-user-circle" style="color: #8b949e; font-size: 24px; cursor: pointer;"></i>
+        </div>
+    </header>
+
+    <!-- Sub Header -->
+    <div style="height: 48px; background: #0d1117; border-bottom: 1px solid #30363d; display: flex; align-items: center; padding: 0 24px; gap: 24px;">
+        <div class="pair-selector">
+            <span style="font-size: 16px;">BTC/USDT</span>
+            <i class="fas fa-chevron-down" style="font-size: 12px; color: #8b949e;"></i>
+        </div>
+        
+        <div class="price-ticker">
+            <div class="ticker-item">
+                <span class="ticker-value up" style="font-size: 18px;">43,250.50</span>
+            </div>
+            <div class="ticker-item">
+                <span class="ticker-label">24h Change</span>
+                <span class="ticker-value up">+2.45%</span>
+            </div>
+            <div class="ticker-item">
+                <span class="ticker-label">24h High</span>
+                <span class="ticker-value">43,890.00</span>
+            </div>
+            <div class="ticker-item">
+                <span class="ticker-label">24h Low</span>
+                <span class="ticker-value">42,100.25</span>
+            </div>
+            <div class="ticker-item">
+                <span class="ticker-label">24h Volume(BTC)</span>
+                <span class="ticker-value">12,453.21</span>
+            </div>
+            <div class="ticker-item">
+                <span class="ticker-label">24h Volume(USDT)</span>
+                <span class="ticker-value">532.45M</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Trading Area -->
+    <div style="display: flex; height: calc(100vh - 112px);">
+        
+        <!-- Chart Area -->
+        <div style="flex: 1; display: flex; flex-direction: column;">
+            <!-- Chart Toolbar -->
+            <div style="height: 40px; border-bottom: 1px solid #30363d; display: flex; align-items: center; padding: 0 16px; gap: 16px;">
+                <div style="display: flex; gap: 4px;">
+                    <button style="padding: 4px 8px; background: #00c853; color: #000; border: none; border-radius: 4px; font-size: 12px; font-weight: 600;">Original</button>
+                    <button style="padding: 4px 8px; background: transparent; color: #8b949e; border: none; font-size: 12px;">TradingView</button>
+                    <button style="padding: 4px 8px; background: transparent; color: #8b949e; border: none; font-size: 12px;">Depth</button>
+                </div>
+                <div style="width: 1px; height: 20px; background: #30363d;"></div>
+                <div style="display: flex; gap: 8px;">
+                    <button style="padding: 4px 8px; background: #21262d; color: #e6edf3; border: none; border-radius: 4px; font-size: 11px;">Time</button>
+                    <button style="padding: 4px 8px; background: transparent; color: #8b949e; border: none; font-size: 11px;">1m</button>
+                    <button style="padding: 4px 8px; background: transparent; color: #8b949e; border: none; font-size: 11px;">5m</button>
+                    <button style="padding: 4px 8px; background: transparent; color: #8b949e; border: none; font-size: 11px;">15m</button>
+                    <button style="padding: 4px 8px; background: transparent; color: #8b949e; border: none; font-size: 11px;">30m</button>
+                    <button style="padding: 4px 8px; background: transparent; color: #8b949e; border: none; font-size: 11px;">1H</button>
+                    <button style="padding: 4px 8px; background: transparent; color: #8b949e; border: none; font-size: 11px;">4H</button>
+                    <button style="padding: 4px 8px; background: #00c853; color: #000; border: none; border-radius: 4px; font-size: 11px; font-weight: 600;">1D</button>
+                    <button style="padding: 4px 8px; background: transparent; color: #8b949e; border: none; font-size: 11px;">1W</button>
+                </div>
+                <div style="margin-left: auto; display: flex; gap: 12px; color: #8b949e; font-size: 12px;">
+                    <i class="fas fa-cog cursor-pointer hover:text-white"></i>
+                    <i class="fas fa-camera cursor-pointer hover:text-white"></i>
+                    <i class="fas fa-expand cursor-pointer hover:text-white"></i>
+                </div>
+            </div>
+            
+            <!-- Chart -->
+            <div id="chart" class="chart-container"></div>
+            
+            <!-- Bottom Panel - Orders -->
+            <div style="height: 280px; background: #0d1117; border-top: 1px solid #30363d;">
+                <div style="display: flex; border-bottom: 1px solid #30363d;">
+                    <button class="tab-btn active">Open Orders (0)</button>
+                    <button class="tab-btn">Order History</button>
+                    <button class="tab-btn">Trade History</button>
+                    <button class="tab-btn">Funds</button>
+                    <button class="tab-btn">Positions</button>
+                </div>
+                <div style="padding: 48px; text-align: center; color: #8b949e; font-size: 14px;">
+                    <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 16px; opacity: 0.3;"></i>
+                    <p>No open orders</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel - Order Book & Trading -->
+        <div style="width: 320px; background: #0d1117; border-left: 1px solid #30363d; display: flex; flex-direction: column;">
+            
+            <!-- Order Book Tabs -->
+            <div style="display: flex; border-bottom: 1px solid #30363d;">
+                <button style="flex: 1; padding: 12px; background: transparent; border: none; color: #e6edf3; font-size: 13px; font-weight: 600; border-bottom: 2px solid #00c853;">Order Book</button>
+                <button style="flex: 1; padding: 12px; background: transparent; border: none; color: #8b949e; font-size: 13px;">Recent Trades</button>
+            </div>
+            
+            <!-- Order Book Header -->
+            <div style="display: flex; padding: 8px 12px; font-size: 11px; color: #8b949e; border-bottom: 1px solid #21262d;">
+                <span style="flex: 1;">Price(USDT)</span>
+                <span style="flex: 1; text-align: right;">Amount(BTC)</span>
+                <span style="flex: 1; text-align: right;">Total</span>
+            </div>
+            
+            <!-- Sell Orders (Asks) -->
+            <div id="sell-orders" style="flex: 1; overflow-y: hidden; display: flex; flex-direction: column-reverse;">
+                <!-- Generated by JS -->
+            </div>
+            
+            <!-- Current Price -->
+            <div style="padding: 12px; text-align: center; border-top: 1px solid #21262d; border-bottom: 1px solid #21262d;">
+                <span id="current-price" style="font-size: 18px; font-weight: 700; color: #00c853; font-family: 'Roboto Mono', monospace;">43,250.50</span>
+                <span style="font-size: 12px; color: #8b949e; margin-left: 8px;">≈ $43,250.50</span>
+            </div>
+            
+            <!-- Buy Orders (Bids) -->
+            <div id="buy-orders" style="flex: 1; overflow-y: hidden;">
+                <!-- Generated by JS -->
+            </div>
+            
+            <!-- Trading Panel -->
+            <div style="padding: 16px; border-top: 1px solid #30363d; background: #161b22;">
+                <!-- Buy/Sell Tabs -->
+                <div style="display: flex; margin-bottom: 16px; background: #0d1117; border-radius: 4px; padding: 4px;">
+                    <button id="tab-buy" onclick="switchTradeSide('buy')" style="flex: 1; padding: 8px; background: #00c853; color: #000; border: none; border-radius: 4px; font-weight: 600; font-size: 14px; cursor: pointer;">Buy</button>
+                    <button id="tab-sell" onclick="switchTradeSide('sell')" style="flex: 1; padding: 8px; background: transparent; color: #8b949e; border: none; font-size: 14px; cursor: pointer;">Sell</button>
+                </div>
+                
+                <!-- Order Type -->
+                <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                    <button style="padding: 4px 12px; background: #21262d; border: 1px solid #30363d; color: #e6edf3; border-radius: 4px; font-size: 12px;">Limit</button>
+                    <button style="padding: 4px 12px; background: transparent; border: 1px solid #30363d; color: #8b949e; border-radius: 4px; font-size: 12px;">Market</button>
+                    <button style="padding: 4px 12px; background: transparent; border: 1px solid #30363d; color: #8b949e; border-radius: 4px; font-size: 12px;">Trigger</button>
+                </div>
+                
+                <!-- Price Input -->
+                <div style="margin-bottom: 8px;">
+                    <div class="input-group">
+                        <input type="number" id="price-input" placeholder="Price" value="43250.50">
+                        <span>USDT</span>
+                    </div>
+                </div>
+                
+                <!-- Amount Input -->
+                <div style="margin-bottom: 8px;">
+                    <div class="input-group">
+                        <input type="number" id="amount-input" placeholder="Amount">
+                        <span>BTC</span>
+                    </div>
+                </div>
+                
+                <!-- Percentage Buttons -->
+                <div style="display: flex; gap: 4px; margin-bottom: 12px;">
+                    <button class="percentage-btn" onclick="setPercent(25)">25%</button>
+                    <button class="percentage-btn" onclick="setPercent(50)">50%</button>
+                    <button class="percentage-btn" onclick="setPercent(75)">75%</button>
+                    <button class="percentage-btn" onclick="setPercent(100)">100%</button>
+                </div>
+                
+                <!-- Total -->
+                <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 12px;">
+                    <span style="color: #8b949e;">Available</span>
+                    <span style="color: #e6edf3; font-family: 'Roboto Mono', monospace;">0.00 USDT</span>
+                </div>
+                
+                <!-- Buy/Sell Button -->
+                <button id="trade-action-btn" class="trade-btn buy" onclick="placeOrder()">Buy BTC</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Chart
+        const chart = LightweightCharts.createChart(document.getElementById('chart'), {
+            layout: {
+                background: { color: '#0d1117' },
+                textColor: '#e6edf3',
+            },
+            grid: {
+                vertLines: { color: '#21262d' },
+                horzLines: { color: '#21262d' },
+            },
+            crosshair: {
+                mode: LightweightCharts.CrosshairMode.Normal,
+                vertLine: { color: '#58a6ff', width: 1, style: 2 },
+                horzLine: { color: '#58a6ff', width: 1, style: 2 },
+            },
+            rightPriceScale: {
+                borderColor: '#30363d',
+                scaleMargins: { top: 0.1, bottom: 0.1 },
+            },
+            timeScale: {
+                borderColor: '#30363d',
+                timeVisible: true,
+                secondsVisible: false,
+            },
+        });
+
+        const candleSeries = chart.addCandlestickSeries({
+            upColor: '#00c853',
+            downColor: '#ff3d00',
+            borderUpColor: '#00c853',
+            borderDownColor: '#ff3d00',
+            wickUpColor: '#00c853',
+            wickDownColor: '#ff3d00',
+        });
+
+        // Generate sample data
+        const data = [];
+        let time = new Date();
+        time.setDate(time.getDate() - 100);
+        let price = 42000;
+
+        for (let i = 0; i < 100; i++) {
+            const open = price;
+            const close = price + (Math.random() - 0.5) * 800;
+            const high = Math.max(open, close) + Math.random() * 200;
+            const low = Math.min(open, close) - Math.random() * 200;
+            
+            data.push({
+                time: time.toISOString().split('T')[0],
+                open: parseFloat(open.toFixed(2)),
+                high: parseFloat(high.toFixed(2)),
+                low: parseFloat(low.toFixed(2)),
+                close: parseFloat(close.toFixed(2))
+            });
+            
+            price = close;
+            time.setDate(time.getDate() + 1);
+        }
+        
+        candleSeries.setData(data);
+        chart.timeScale().fitContent();
+
+        // Generate Order Book
+        function generateOrderBook() {
+            const sellContainer = document.getElementById('sell-orders');
+            const buyContainer = document.getElementById('buy-orders');
+            const currentPrice = 43250.50;
+            
+            // Sell orders (Asks) - Red
+            let sellHTML = '';
+            for (let i = 1; i <= 8; i++) {
+                const price = currentPrice + (i * 10) + Math.random() * 5;
+                const amount = (Math.random() * 2).toFixed(4);
+                const total = (price * amount).toFixed(2);
+                const width = Math.random() * 80;
+                
+                sellHTML += `
+                    <div class="order-book-row">
+                        <div class="depth-bar sell-bar" style="width: ${width}%;"></div>
+                        <span style="flex: 1; color: #ff3d00; z-index: 1; font-family: 'Roboto Mono', monospace;">${price.toFixed(2)}</span>
+                        <span style="flex: 1; text-align: right; color: #e6edf3; z-index: 1; font-family: 'Roboto Mono', monospace;">${amount}</span>
+                        <span style="flex: 1; text-align: right; color: #8b949e; z-index: 1; font-family: 'Roboto Mono', monospace;">${total}</span>
+                    </div>
+                `;
+            }
+            sellContainer.innerHTML = sellHTML;
+            
+            // Buy orders (Bids) - Green
+            let buyHTML = '';
+            for (let i = 1; i <= 8; i++) {
+                const price = currentPrice - (i * 10) - Math.random() * 5;
+                const amount = (Math.random() * 2).toFixed(4);
+                const total = (price * amount).toFixed(2);
+                const width = Math.random() * 80;
+                
+                buyHTML += `
+                    <div class="order-book-row">
+                        <div class="depth-bar buy-bar" style="width: ${width}%;"></div>
+                        <span style="flex: 1; color: #00c853; z-index: 1; font-family: 'Roboto Mono', monospace;">${price.toFixed(2)}</span>
+                        <span style="flex: 1; text-align: right; color: #e6edf3; z-index: 1; font-family: 'Roboto Mono', monospace;">${amount}</span>
+                        <span style="flex: 1; text-align: right; color: #8b949e; z-index: 1; font-family: 'Roboto Mono', monospace;">${total}</span>
+                    </div>
+                `;
+            }
+            buyContainer.innerHTML = buyHTML;
+        }
+        
+        generateOrderBook();
+        setInterval(generateOrderBook, 2000);
+
+        // Trading Functions
+        let currentSide = 'buy';
+        
+        function switchTradeSide(side) {
+            currentSide = side;
+            const buyTab = document.getElementById('tab-buy');
+            const sellTab = document.getElementById('tab-sell');
+            const btn = document.getElementById('trade-action-btn');
+            
+            if (side === 'buy') {
+                buyTab.style.background = '#00c853';
+                buyTab.style.color = '#000';
+                sellTab.style.background = 'transparent';
+                sellTab.style.color = '#8b949e';
+                btn.textContent = 'Buy BTC';
+                btn.className = 'trade-btn buy';
+            } else {
+                sellTab.style.background = '#ff3d00';
+                sellTab.style.color = '#fff';
+                buyTab.style.background = 'transparent';
+                buyTab.style.color = '#8b949e';
+                btn.textContent = 'Sell BTC';
+                btn.className = 'trade-btn sell';
+            }
+        }
+        
+        function setPercent(percent) {
+            document.getElementById('amount-input').value = (percent / 100 * 0.5).toFixed(4);
+        }
+        
+        function placeOrder() {
+            const price = document.getElementById('price-input').value;
+            const amount = document.getElementById('amount-input').value;
+            
+            if (!amount || amount <= 0) {
+                alert('Please enter amount');
+                return;
+            }
+            
+            alert(`${currentSide.toUpperCase()} order placed!\nPrice: ${price}\nAmount: ${amount} BTC`);
+        }
+
+        // Tab switching
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
